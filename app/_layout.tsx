@@ -1,9 +1,11 @@
+
 import { Stack, useGlobalSearchParams } from 'expo-router';
 import { SafeAreaProvider, useSafeAreaInsets, SafeAreaView } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
 import { useEffect, useState } from 'react';
 import { setupErrorLogging } from '../utils/errorLogger';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ExcelProvider } from '../contexts/ExcelContext';
 
 const STORAGE_KEY = 'emulated_device';
 
@@ -46,14 +48,16 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <ExcelProvider>
           <Stack
             screenOptions={{
               headerShown: false,
               animation: 'default',
             }}
           />
-        </GestureHandlerRootView>
+        </ExcelProvider>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 }
