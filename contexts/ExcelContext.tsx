@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useExcelData } from '../hooks/useExcelData';
-import { ExcelFile, ExcelSheetData, SearchResult } from '../types/ExcelData';
+import { ExcelFile, ExcelSheetData, SearchResult, MultiSearchCriteria, MultiSearchResult } from '../types/ExcelData';
 
 interface ExcelContextType {
   excelFile: ExcelFile | null;
@@ -11,6 +11,7 @@ interface ExcelContextType {
   loadExcelFile: (fileUri: string) => Promise<void>;
   selectSheet: (sheetName: string) => void;
   searchData: (searchValue: string) => SearchResult;
+  multiSearchData: (searchCriteria: MultiSearchCriteria[]) => MultiSearchResult;
   reset: () => void;
 }
 

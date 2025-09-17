@@ -1,6 +1,6 @@
 
 import * as XLSX from 'xlsx';
-import { ExcelFile, ExcelSheetData, ExcelRowData } from '../types/ExcelData';
+import { ExcelFile, ExcelSheetData, ExcelRowData, MultiSearchCriteria, MultiSearchResult } from '../types/ExcelData';
 
 export const processExcelFile = async (fileUri: string): Promise<ExcelFile> => {
   try {
@@ -105,4 +105,38 @@ export const searchInSheet = (sheet: ExcelSheetData, searchValue: string): Excel
   }
   
   return result || null;
+};
+
+export const multiSearchInSheet = (sheet: ExcelSheetData, searchCriteria: MultiSearchCriteria[]): MultiSearchResult => {
+  console.log(`Multi-search in sheet "${sheet.name}" with ${searchCriteria.length} criteria`);
+  
+  if (searchCriteria.length === 0) {
+    return { found: false, results: [], totalFound: 0, sheetName: sheet.name };
+  }
+  
+  const results: ExcelRowData[] = [];
+  const foundValues = new Set<string>(); // Pour éviter les doublons
+  
+  searchCriteria.forEach(criteria => {
+    if (criteria.value.trim()) {
+      const result = sheet.data.find(row => 
+        row.searchColumn.toLowerCase() === criteria.value.toLowerCase()
+      );
+      
+      if (result && !foundValues.has(result.searchColumn)) {
+        results.push(result);
+        foundValues.add(result.searchColumn);
+        console.log(`Found result for "${criteria.value}":`, result);
+      }
+    }
+  });
+  
+  console.log(`Multi-search completed: ${results.length} results found`);
+  
+  return {
+    found: results.length > 0,
+    results,
+    totalFound: results.length,
+    sheetName: sheet.name
+  };
 };

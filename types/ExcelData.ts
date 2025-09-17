@@ -21,3 +21,16 @@ export interface SearchResult {
   data?: ExcelRowData;
   sheetName?: string;
 }
+
+export interface MultiSearchCriteria {
+  id: string;
+  value: string;
+  column?: string; // Optional: pour rechercher dans une colonne spécifique
+}
+
+export interface MultiSearchResult {
+  found: boolean;
+  results: ExcelRowData[];
+  sheetName?: string;
+  totalFound: number;
+}

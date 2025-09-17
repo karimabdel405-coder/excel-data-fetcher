@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
-import { ExcelFile, ExcelSheetData, SearchResult } from '../types/ExcelData';
-import { processExcelFile, searchInSheet } from '../utils/excelProcessor';
+import { ExcelFile, ExcelSheetData, SearchResult, MultiSearchCriteria, MultiSearchResult } from '../types/ExcelData';
+import { processExcelFile, searchInSheet, multiSearchInSheet } from '../utils/excelProcessor';
 
 export const useExcelData = () => {
   const [excelFile, setExcelFile] = useState<ExcelFile | null>(null);
@@ -50,6 +50,14 @@ export const useExcelData = () => {
     };
   };
 
+  const multiSearchData = (searchCriteria: MultiSearchCriteria[]): MultiSearchResult => {
+    if (!selectedSheet) {
+      return { found: false, results: [], totalFound: 0 };
+    }
+
+    return multiSearchInSheet(selectedSheet, searchCriteria);
+  };
+
   const reset = () => {
     setExcelFile(null);
     setSelectedSheet(null);
@@ -64,6 +72,7 @@ export const useExcelData = () => {
     loadExcelFile,
     selectSheet,
     searchData,
+    multiSearchData,
     reset
   };
 };
