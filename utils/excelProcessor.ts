@@ -41,8 +41,12 @@ export const processExcelFile = async (fileUri: string): Promise<ExcelFile> => {
       
       const processedData: ExcelRowData[] = [];
       
-      // Process each row (skip header row)
-      for (let rowIndex = 1; rowIndex < jsonData.length; rowIndex++) {
+      // Process each row starting from line 10 (index 9, since we skip header at index 0)
+      // So we start from index 9 (which is line 10 in Excel)
+      const startRowIndex = 9; // Line 10 in Excel (0-based index)
+      console.log(`Starting data processing from line ${startRowIndex + 1} (Excel line 10)`);
+      
+      for (let rowIndex = startRowIndex; rowIndex < jsonData.length; rowIndex++) {
         const row = jsonData[rowIndex] as any[];
         
         if (row && row.length > 0) {
@@ -53,11 +57,13 @@ export const processExcelFile = async (fileUri: string): Promise<ExcelFile> => {
             processedData.push({
               searchColumn: searchValue.toString(),
               dataColumns: dataValues.map(val => val ? val.toString() : ''),
-              rowIndex
+              rowIndex: rowIndex + 1 // Store 1-based row index for Excel reference
             });
           }
         }
       }
+      
+      console.log(`Processed ${processedData.length} rows starting from line 10 for sheet "${sheetName}"`);
       
       sheets.push({
         name: sheetName,
